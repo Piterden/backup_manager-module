@@ -1,0 +1,9 @@
+{
+    "name": "defr/backup_manager-module",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "Defr\\BackupManagerModule\\": "src/"
+        }
+    }
+}
