@@ -3,6 +3,7 @@
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
 use Anomaly\Streams\Platform\Model\BackupManager\BackupManagerDumpsEntryModel;
 use Defr\BackupManagerModule\Dump\Console\DumpCommand;
+use Defr\BackupManagerModule\Dump\Console\ListCommand;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 use Defr\BackupManagerModule\Dump\DumpModel;
 use Defr\BackupManagerModule\Dump\DumpRepository;
@@ -27,5 +28,6 @@ class BackupManagerModuleServiceProvider extends AddonServiceProvider
 
     protected $commands = [
         DumpCommand::class,
+        ListCommand::class,
     ];
 }

@@ -74,7 +74,7 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
      */
     public function getSize()
     {
-        return app('files')->size($this->getPath());
+        return filesize($this->getPath());
     }
 
     /**
@@ -98,5 +98,25 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
         $this->content = $content;
 
         return $this;
+    }
+
+    /**
+     * Gets the created on.
+     *
+     * @return     <type>  The created on.
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Gets the updated on.
+     *
+     * @return     <type>  The updated on.
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
     }
 }

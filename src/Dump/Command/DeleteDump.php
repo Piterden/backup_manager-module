@@ -1,7 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Http\Request;
 
 /**
  * Class for delete dump from the filesystem

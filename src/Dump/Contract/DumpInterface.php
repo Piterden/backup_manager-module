@@ -22,7 +22,7 @@ interface DumpInterface extends EntryInterface
     /**
      * Sets the title.
      *
-     * @param  string  $title The title
+     * @param  string $title The title
      * @return string The title.
      */
     public function setTitle($title);
@@ -37,7 +37,7 @@ interface DumpInterface extends EntryInterface
     /**
      * Sets the path.
      *
-     * @param  string  $path The path
+     * @param  string $path The path
      * @return string The path.
      */
     public function setPath($path);
@@ -63,4 +63,18 @@ interface DumpInterface extends EntryInterface
      * @return $this
      */
     public function setContent($content);
+
+    /**
+     * Gets the created on.
+     *
+     * @return     <type>  The created on.
+     */
+    public function getCreatedAt();
+
+    /**
+     * Gets the updated on.
+     *
+     * @return     <type>  The updated on.
+     */
+    public function getUpdatedAt();
 }
