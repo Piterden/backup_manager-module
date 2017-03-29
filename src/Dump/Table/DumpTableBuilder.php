@@ -13,9 +13,12 @@ class DumpTableBuilder extends TableBuilder
      * @var array|string
      */
     protected $columns = [
+        'entry.id',
         'path' => [
-            'value' => 'entry.get_path',
+            'heading' => 'module::field.title.name',
+            'value' => 'entry.name',
         ],
+        'entry.size'
     ];
 
     /**
@@ -24,24 +27,11 @@ class DumpTableBuilder extends TableBuilder
      * @var array|string
      */
     protected $buttons = [
+        'edit',
         'delete' => [
             'href' => 'admin/backup_manager/delete/{entry.id}',
         ],
     ];
-
-    /**
-     * The table options.
-     *
-     * @var array
-     */
-    protected $options = [];
-
-    /**
-     * The table assets.
-     *
-     * @var array
-     */
-    protected $assets = [];
 
     public function delete($id)
     {

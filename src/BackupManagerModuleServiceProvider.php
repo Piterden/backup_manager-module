@@ -28,21 +28,4 @@ class BackupManagerModuleServiceProvider extends AddonServiceProvider
     protected $commands = [
         DumpCommand::class,
     ];
-
-    protected $plugins    = [];
-    protected $middleware = [];
-    protected $listeners  = [];
-    protected $aliases    = [];
-    protected $providers  = [];
-    protected $overrides  = [];
-    protected $mobile     = [];
-
-    public function register()
-    {
-        }
-
-    public function map()
-    {
-        }
-
 }

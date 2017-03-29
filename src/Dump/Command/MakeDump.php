@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
  *
  * @author Denis Efremov <efremov.a.denis@gmail.com>
  */
-class WriteDump
+class MakeDump
 {
 
     /**

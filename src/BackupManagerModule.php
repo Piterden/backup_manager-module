@@ -20,7 +20,9 @@ class BackupManagerModule extends Module
     protected $sections = [
         'dumps' => [
             'buttons' => [
-                'new_dump',
+                'new_dump' => [
+                    'class' => 'btn-warning',
+                ],
             ],
         ],
     ];

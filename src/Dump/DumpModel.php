@@ -24,6 +24,28 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
     }
 
     /**
+     * Gets the title.
+     *
+     * @return string The title.
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Sets the title.
+     *
+     * @return string The title.
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
      * Gets the path.
      *
      * @return string The path.
@@ -43,6 +65,16 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
         $this->path = $path;
 
         return $this;
+    }
+
+    /**
+     * Gets the size.
+     *
+     * @return string The size.
+     */
+    public function getSize()
+    {
+        return app('files')->size($this->getPath());
     }
 
     /**
