@@ -1,8 +1,8 @@
 <?php namespace Defr\BackupManagerModule\Dump\Table;
 
 use Anomaly\Streams\Platform\Ui\Table\TableBuilder;
-use Defr\BackupManagerModule\Dump\Command\GetDumps;
 use Defr\BackupManagerModule\Dump\Command\DeleteDump;
+use Defr\BackupManagerModule\Dump\Command\GetDumps;
 
 class DumpTableBuilder extends TableBuilder
 {
@@ -16,9 +16,10 @@ class DumpTableBuilder extends TableBuilder
         'entry.id',
         'path' => [
             'heading' => 'module::field.title.name',
-            'value' => 'entry.name',
+            'value'   => 'entry.name',
         ],
-        'entry.size'
+        'entry.size',
+        'entry.created_at',
     ];
 
     /**
@@ -27,6 +28,10 @@ class DumpTableBuilder extends TableBuilder
      * @var array|string
      */
     protected $buttons = [
+        'information' => [
+            'data-toggle' => 'modal',
+
+        ],
         'edit',
         'delete' => [
             'href' => 'admin/backup_manager/delete/{entry.id}',

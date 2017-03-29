@@ -1,8 +1,13 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
+use Anomaly\Streams\Platform\Addon\Extension\Extension;
+use Anomaly\Streams\Platform\Addon\Module\Module;
+use Anomaly\Streams\Platform\Application\Application;
+use Anomaly\Streams\Platform\Stream\Command\GetStreams;
 use Carbon\Carbon;
 use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -14,9 +19,35 @@ use Illuminate\Support\Facades\DB;
  */
 class MakeDump
 {
+    use DispatchesJobs;
+
+    /**
+     * Database to work with
+     *
+     * @var string
+     */
     protected $database;
+
+    /**
+     * Tables to dump
+     *
+     * @var string
+     */
     protected $tables;
+
+    /**
+     * Addon to dump
+     *
+     * @var Addon
+     */
     protected $addon;
+
+    /**
+     * App instance
+     *
+     * @var Application
+     */
+    protected $app;
 
     /**
      * Create an instance fo MakeDump class
@@ -25,11 +56,12 @@ class MakeDump
      * @param string $tables   The tables
      * @param Addon  $addon    The addon
      */
-    public function __construct($database, $tables, $addon)
+    public function __construct($database = '', $tables = '', $addon = null)
     {
         $this->database = $database;
         $this->tables   = $tables;
         $this->addon    = $addon;
+        $this->app      = app(Application::class);
     }
 
     /**
@@ -41,52 +73,100 @@ class MakeDump
      */
     public function handle(Filesystem $files, Repository $config)
     {
-        $path   = base_path(env('DUMPS_PATH', 'dumps'));
-        $date   = Carbon::now()->format('Y-m-d_H:i:s_');
-        $tables = DB::select('SHOW TABLES');
+        $dumpPath = base_path(env('DUMPS_PATH', 'dumps'));
+        $date     = Carbon::now()->format(env('DUMP_FORMAT', 'Y-m-d_H:i:s_'));
+        $tables   = DB::select('SHOW TABLES');
 
-        if (!$this->database)
+        if (!$database = $this->database)
         {
-            $this->database = $config->get('database.default');
+            $database = $config->get('database.default');
         }
+
+        $includedTables = [];
+        $db_name        = $config->get('database.connections.'.$database.'.database');
+        $class_name     = 'Tables_in_'.$db_name;
+        $appReference   = $this->app->getReference();
 
         if ($this->tables)
         {
-            $this->tables = explode(',', $this->tables);
+            $includedTables = array_merge(
+                $includedTables,
+                explode(',', $this->tables)
+            );
         }
 
-        if ($this->addon instanceof Module || $this->addon instanceof Extension)
+        if ($this->addon)
         {
+            $slug = $this->addon->getSlug();
+            $path = $this->addon->getPath();
 
+            $migrations = $files->glob($path.'/migrations/*');
+
+            if (count($migrations) > 0)
+            {
+                foreach ($tables as $table)
+                {
+                    if (starts_with($table->$class_name, $appReference.'_'.$slug.'_'))
+                    {
+                        $includedTables[] = $table->$class_name;
+                    }
+                }
+            }
         }
 
-        $db_name    = $config->get('database.connections.'.$this->database.'.database');
-        $class_name = 'Tables_in_'.$db_name;
+        if (count($includedTables))
+        {
+            $tables = $includedTables;
+        }
 
         $array = [];
 
         foreach ($tables as $table)
         {
-            $array[$table->$class_name] = DB::select('SELECT * FROM '.$table->$class_name, [1]);
+            if (is_object($table))
+            {
+                $table = $table->$class_name;
+            }
+
+            if (!starts_with(trim($table), $appReference.'_'))
+            {
+                $table = $appReference.'_'.$table;
+            }
+
+            $array[$table] = DB::select('SELECT * FROM '.$table, [1]);
         }
 
-        dd($array);
-
-        if (!$files->exists($path))
+        if (!$files->exists($dumpPath))
         {
-            $files->makeDirectory($path);
+            $files->makeDirectory($dumpPath);
         }
 
-        if (!$files->isDirectory($path))
+        if (!$files->isDirectory($dumpPath))
         {
             return false;
         }
 
-        $dump_file = $path.'/'.$date.$db_name.'_dump.sql.json';
+        $dump_file = $dumpPath.'/'.$date.$db_name.'_dump.sql.json';
 
         if ($files->put($dump_file, json_encode($array)))
         {
             return $dump_file;
         }
+    }
+
+    /**
+     * Gets the root streams of addon.
+     *
+     * @param  string             $slug The addon slug
+     * @return StreamCollection
+     */
+    public function getStreams($slug)
+    {
+        return $this->dispatch(new GetStreams($slug))->filter(
+            function ($stream)
+            {
+                return !str_contains($stream->getSlug(), '_');
+            }
+        );
     }
 }

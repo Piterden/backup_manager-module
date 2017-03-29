@@ -13,6 +13,7 @@ class DefrModuleBackupManagerCreateDumpsStream extends Migration
     protected $stream = [
         'slug'         => 'dumps',
         'title_column' => 'title',
+        'order_by'     => 'created_at',
     ];
 
     /**
