@@ -2,6 +2,7 @@
     "name": "defr/backup_manager-module",
     "description": "The most powerful Laravel CMS in the world.",
     "type": "streams-addon",
+    "version": "0.1.0",
     "keywords": [
         "streams",
         "pyrocms",
