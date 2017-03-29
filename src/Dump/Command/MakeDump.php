@@ -14,6 +14,23 @@ use Illuminate\Support\Facades\DB;
  */
 class MakeDump
 {
+    protected $database;
+    protected $tables;
+    protected $addon;
+
+    /**
+     * Create an instance fo MakeDump class
+     *
+     * @param string $database The database connection
+     * @param string $tables   The tables
+     * @param Addon  $addon    The addon
+     */
+    public function __construct($database, $tables, $addon)
+    {
+        $this->database = $database;
+        $this->tables   = $tables;
+        $this->addon    = $addon;
+    }
 
     /**
      * Handle the command
@@ -24,18 +41,36 @@ class MakeDump
      */
     public function handle(Filesystem $files, Repository $config)
     {
-        $path    = env('DUMPS_PATH', base_path('dumps'));
-        $date    = Carbon::now()->format('Y-m-d_H:i:s_');
-        $tables  = DB::select('SHOW TABLES');
-        $db_name = $config->get('database.connections.'
-            .$config->get('database.default').'.database');
-        $class_name = 'Tables_in_'.$db_name;
-        $array      = [];
+        $path   = base_path(env('DUMPS_PATH', 'dumps'));
+        $date   = Carbon::now()->format('Y-m-d_H:i:s_');
+        $tables = DB::select('SHOW TABLES');
 
-        foreach ($tables as $name => $table)
+        if (!$this->database)
         {
-            $array[$name] = DB::select('SELECT * FROM '.$table->$class_name, [1]);
+            $this->database = $config->get('database.default');
         }
+
+        if ($this->tables)
+        {
+            $this->tables = explode(',', $this->tables);
+        }
+
+        if ($this->addon instanceof Module || $this->addon instanceof Extension)
+        {
+
+        }
+
+        $db_name    = $config->get('database.connections.'.$this->database.'.database');
+        $class_name = 'Tables_in_'.$db_name;
+
+        $array = [];
+
+        foreach ($tables as $table)
+        {
+            $array[$table->$class_name] = DB::select('SELECT * FROM '.$table->$class_name, [1]);
+        }
+
+        dd($array);
 
         if (!$files->exists($path))
         {
