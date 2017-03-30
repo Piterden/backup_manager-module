@@ -45,7 +45,7 @@ class DumpCommand extends Command
             $this->warn($path);
         }
 
-        $this->info((microtime() -$start).' sec.');
+        $this->info('Size: '.filesize($path).'. Time: '.(microtime() -$start).' sec.');
     }
 
     /**
