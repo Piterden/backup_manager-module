@@ -78,19 +78,19 @@ class DumpCommand extends Command
 
         if ($size < 1024 ^ 2)
         {
-            $size = $size / 1024;
+            $size = round($size / 1024, 2);
             return "$size KB";
         }
 
         if ($size < 1024 ^ 3)
         {
-            $size = $size / 1024 ^ 2;
+            $size = round($size / 1024 ^ 2, 2);
             return "$size MB";
         }
 
         if ($size < 1024 ^ 4)
         {
-            $size = $size / 1024 ^ 3;
+            $size = round($size / 1024 ^ 3, 2);
             return "$size GB";
         }
     }
