@@ -29,6 +29,8 @@ class DumpCommand extends Command
      */
     public function fire()
     {
+        $start = microtime();
+
         $database = $this->input->getOption('database');
         $tables   = $this->input->getOption('tables');
 
@@ -42,6 +44,8 @@ class DumpCommand extends Command
             $this->info('Dump created successfully!');
             $this->warn($path);
         }
+
+        $this->info((microtime() -$start).' sec.');
     }
 
     /**

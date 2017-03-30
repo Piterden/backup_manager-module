@@ -12,6 +12,8 @@ class DumpFormHandler
      */
     public function handle(DumpFormBuilder $builder)
     {
+        $addon = $builder->getForm()->getValue('addon');
+
         $builder->getForm()->removeField('addon')->removeField('database');
     }
 }

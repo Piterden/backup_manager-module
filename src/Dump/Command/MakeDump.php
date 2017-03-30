@@ -38,7 +38,7 @@ class MakeDump
     /**
      * Addon to dump
      *
-     * @var Addon
+     * @var Addon|string
      */
     protected $addon;
 
@@ -54,14 +54,23 @@ class MakeDump
      *
      * @param string $database The database connection
      * @param string $tables   The tables
-     * @param Addon  $addon    The addon
+     * @param Addon|string $addon    The addon
      */
     public function __construct($database = '', $tables = '', $addon = null)
     {
         $this->database = $database;
         $this->tables   = $tables;
-        $this->addon    = $addon;
         $this->app      = app(Application::class);
+
+        if (is_object($addon))
+        {
+            $this->addon = $addon;
+        }
+
+        if (is_string($addon))
+        {
+            $this->addon = $this->app->make($addon);
+        }
     }
 
     /**
