@@ -31,9 +31,9 @@ class DumpPresenter extends EntryPresenter
      */
     public function getSize()
     {
-        $size = $this->object->getSize() / 1000;
+        $size = human_filesize($this->object->getSize());
 
-        return "<h5>{$size} KB</h5>";
+        return "<h5>{$size}</h5>";
     }
 
     /**

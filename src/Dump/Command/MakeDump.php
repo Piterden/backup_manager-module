@@ -9,7 +9,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
-
+use Anomaly\Streams\Platform\Addon\Command\GetAddon;
 /**
  * Class for write the dump to filesystem
  *
@@ -69,7 +69,7 @@ class MakeDump
 
         if (is_string($addon))
         {
-            $this->addon = $this->app->make($addon);
+            $this->addon = $this->dispatch(new GetAddon($addon));
         }
     }
 

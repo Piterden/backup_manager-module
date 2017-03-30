@@ -65,4 +65,16 @@ class DumpsController extends AdminController
     {
         return $table->delete($id);
     }
+
+    /**
+     * Restore a dump
+     *
+     * @param  DumpTableBuilder $table The table
+     * @param  int              $id    The identifier
+     * @return Response
+     */
+    public function restore(DumpTableBuilder $table, $id)
+    {
+        return $table->restore($id);
+    }
 }

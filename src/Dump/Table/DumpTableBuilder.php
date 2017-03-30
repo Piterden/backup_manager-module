@@ -3,7 +3,15 @@
 use Anomaly\Streams\Platform\Ui\Table\TableBuilder;
 use Defr\BackupManagerModule\Dump\Command\DeleteDump;
 use Defr\BackupManagerModule\Dump\Command\GetDumps;
+use Defr\BackupManagerModule\Dump\Command\RestoreDump;
 
+/**
+ * Class for building a table
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpTableBuilder extends TableBuilder
 {
 
@@ -31,6 +39,9 @@ class DumpTableBuilder extends TableBuilder
      * @var array|string
      */
     protected $buttons = [
+        'restore'     => [
+            'href' => 'admin/backup_manager/restore/{entry.id}',
+        ],
         'information' => [
             'data-toggle' => 'modal',
             'data-target' => '#modal-wide',
@@ -50,15 +61,37 @@ class DumpTableBuilder extends TableBuilder
      */
     public function delete($id)
     {
-        /* @var DumpCollection $entries */
-        $entries = $this->dispatch(new GetDumps());
-
-        $entry = $entries->first(function ($entry) use ($id)
-        {
-            return $entry->id == $id;
-        });
+        $entry = $this->getEntryById($id);
 
         return $this->dispatch(new DeleteDump($entry->getPath()));
     }
 
+    /**
+     * Restore dump to DB
+     *
+     * @param  int        $id The identifier
+     * @return Response
+     */
+    public function restore($id)
+    {
+        $entry = $this->getEntryById($id);
+
+        return $this->dispatch(new RestoreDump($entry->getPath()));
+    }
+
+    /**
+     * Gets the entry by identifier.
+     *
+     * @param  int           $id The identifier
+     * @return DumpInterface The entry by identifier.
+     */
+    private function getEntryById($id)
+    {
+        return $this->dispatch(new GetDumps())->first(
+            function ($entry) use ($id)
+            {
+                return $entry->id == $id;
+            }
+        );
+    }
 }
