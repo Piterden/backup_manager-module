@@ -45,7 +45,8 @@ class DumpCommand extends Command
             $this->warn($path);
         }
 
-        $this->info('Size: '.filesize($path).'. Time: '.(microtime() -$start).' sec.');
+        $this->info('Size: '.$this->getReadableSize(filesize($path))
+            .'. Time: '.(microtime() - $start).' sec.');
     }
 
     /**
@@ -60,5 +61,37 @@ class DumpCommand extends Command
             ['tables', null, InputOption::VALUE_OPTIONAL, 'Tables to include in the dump.'],
             ['addon', null, InputOption::VALUE_OPTIONAL, 'Addon, in dot notation.'],
         ];
+    }
+
+    /**
+     * Gets the readable size.
+     *
+     * @param  integer $size The size
+     * @return string  The readable size.
+     */
+    private function getReadableSize($size)
+    {
+        if ($size < 1024)
+        {
+            return "$size B";
+        }
+
+        if ($size < 1024 ^ 2)
+        {
+            $size = $size / 1024;
+            return "$size KB";
+        }
+
+        if ($size < 1024 ^ 3)
+        {
+            $size = $size / 1024 ^ 2;
+            return "$size MB";
+        }
+
+        if ($size < 1024 ^ 4)
+        {
+            $size = $size / 1024 ^ 3;
+            return "$size GB";
+        }
     }
 }
