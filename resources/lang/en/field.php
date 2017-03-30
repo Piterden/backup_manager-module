@@ -10,4 +10,10 @@ return [
     'size'  => [
         'name' => 'Size',
     ],
+    'addon'  => [
+        'name' => 'Addon',
+    ],
+    'database'  => [
+        'name' => 'Database',
+    ],
 ];

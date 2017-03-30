@@ -48,7 +48,6 @@ class LoadInfo
                 'defr.module.backup_manager::admin/dumps/info',
                 [
                     'dump'    => $dump,
-                    // 'content' => json_decode($files->get($dump->getPath()), true),
                 ]
             );
         }
