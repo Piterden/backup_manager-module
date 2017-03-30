@@ -8,7 +8,7 @@ class DumpPresenter extends EntryPresenter
     /**
      * Gets the presented path.
      *
-     * @return     <type>  The path.
+     * @return string The path.
      */
     public function getName()
     {
@@ -34,5 +34,15 @@ class DumpPresenter extends EntryPresenter
         $size = $this->object->getSize() / 1000;
 
         return "<h5>{$size} KB</h5>";
+    }
+
+    /**
+     * Get a count of dumped tables
+     *
+     * @return string
+     */
+    public function tablesCount()
+    {
+        return count($this->object->getContent());
     }
 }

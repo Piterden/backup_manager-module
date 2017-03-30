@@ -1,6 +1,7 @@
 <?php namespace Defr\BackupManagerModule\Http\Controller\Admin;
 
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
+use Defr\BackupManagerModule\Dump\Command\LoadInfo;
 use Defr\BackupManagerModule\Dump\Form\DumpFormBuilder;
 use Defr\BackupManagerModule\Dump\Table\DumpTableBuilder;
 
@@ -39,6 +40,18 @@ class DumpsController extends AdminController
     public function edit(DumpFormBuilder $form, $id)
     {
         return $form->render($id);
+    }
+
+    /**
+     * Information about an existing entry.
+     *
+     * @param  DumpFormBuilder $form
+     * @param  $id
+     * @return Response
+     */
+    public function info($id)
+    {
+        return $this->dispatch(new LoadInfo($id));
     }
 
     /**

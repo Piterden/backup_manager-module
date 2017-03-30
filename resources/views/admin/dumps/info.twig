@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <button class="close" data-dismiss="modal">
+        <span>&times;</span>
+    </button>
+    <h4 class="modal-title">{{ trans('module::message.dump_info') }}</h4>
+</div>
+
+<div class="modal-body">
+
+    {% if dump %}
+
+        <ul class="nav nav-pills nav-stacked">
+            <li class="nav-item">
+                <h4><strong>{{ dump.title }}</strong></h4>
+                <small>{{ dump.path }}</small>
+            </li>
+        </ul>
+
+        <table class="table table-stripped table-hovered">
+            <thead>
+                <tr>
+                    <th>{{ trans('module::table.header.table') }}</th>
+                    <th>{{ trans('module::table.header.data') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for name, rows in dump.content %}
+                    <tr>
+                        <td><h3>{{ name }}</h3></td>
+                        <td><strong>{{ count(rows) }} {{ trans('module::table.rows') }}</strong></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+
+    {% else %}
+
+        {{ trans('streams::message.no_results') }}
+
+    {% endif %}
+
+</div>

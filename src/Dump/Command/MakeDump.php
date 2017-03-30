@@ -128,7 +128,9 @@ class MakeDump
                 $table = $table->$class_name;
             }
 
-            if (!starts_with(trim($table), $appReference.'_'))
+            $table = trim($table);
+
+            if (!starts_with($table, $appReference.'_') && !starts_with($table, 'applications'))
             {
                 $table = $appReference.'_'.$table;
             }

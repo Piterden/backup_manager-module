@@ -84,7 +84,7 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
      */
     public function getContent()
     {
-        return $this->content;
+        return json_decode(file_get_contents($this->getPath()), true);
     }
 
     /**

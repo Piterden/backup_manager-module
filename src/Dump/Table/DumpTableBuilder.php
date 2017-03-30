@@ -14,11 +14,14 @@ class DumpTableBuilder extends TableBuilder
      */
     protected $columns = [
         'entry.id',
-        'path' => [
+        'path'               => [
             'heading' => 'module::field.title.name',
             'value'   => 'entry.name',
         ],
         'entry.size',
+        'entry.tables_count' => [
+            'heading' => 'module::table.count.name',
+        ],
         'entry.created_at',
     ];
 
@@ -30,14 +33,21 @@ class DumpTableBuilder extends TableBuilder
     protected $buttons = [
         'information' => [
             'data-toggle' => 'modal',
-
+            'data-target' => '#modal-wide',
+            'href'        => 'admin/backup_manager/info/{entry.id}',
         ],
         'edit',
-        'delete' => [
+        'delete'      => [
             'href' => 'admin/backup_manager/delete/{entry.id}',
         ],
     ];
 
+    /**
+     * Delete the dump entry
+     *
+     * @param  int       $id The identifier
+     * @return Reponse
+     */
     public function delete($id)
     {
         /* @var DumpCollection $entries */
