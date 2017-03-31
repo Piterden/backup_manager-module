@@ -9,12 +9,10 @@
         "dump",
         "laravel-cms"
     ],
-    "authors": [
-        {
-            "name": "Denis Efremov",
-            "email": "efremov.a.denis@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "Denis Efremov",
+        "email": "efremov.a.denis@gmail.com"
+    }],
     "license": "MIT",
     "autoload": {
         "psr-4": {

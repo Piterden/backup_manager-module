@@ -1,5 +1,7 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
+use Anomaly\SettingsModule\Setting\Contract\SettingRepositoryInterface;
+use Anomaly\Streams\Platform\Addon\Command\GetAddon;
 use Anomaly\Streams\Platform\Addon\Extension\Extension;
 use Anomaly\Streams\Platform\Addon\Module\Module;
 use Anomaly\Streams\Platform\Application\Application;
@@ -9,7 +11,7 @@ use Illuminate\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
-use Anomaly\Streams\Platform\Addon\Command\GetAddon;
+
 /**
  * Class for write the dump to filesystem
  *
@@ -52,8 +54,8 @@ class MakeDump
     /**
      * Create an instance fo MakeDump class
      *
-     * @param string $database The database connection
-     * @param string $tables   The tables
+     * @param string       $database The database connection
+     * @param string       $tables   The tables
      * @param Addon|string $addon    The addon
      */
     public function __construct($database = '', $tables = '', $addon = null)
@@ -76,15 +78,34 @@ class MakeDump
     /**
      * Handle the command
      *
-     * @param  Filesystem $files  The files
-     * @param  Repository $config The configuration
-     * @return string
+     * @param  Filesystem                 $files    The files
+     * @param  Repository                 $config   The configuration
+     * @param  SettingRepositoryInterface $settings The settings
+     * @return boolean|string             Path of made file
      */
-    public function handle(Filesystem $files, Repository $config)
+    public function handle(
+        Filesystem $files,
+        Repository $config,
+        SettingRepositoryInterface $settings
+    )
     {
-        $dumpPath = base_path(env('DUMPS_PATH', 'dumps'));
-        $date     = Carbon::now()->format(env('DUMP_FORMAT', 'Y-m-d_H:i:s_'));
-        $tables   = DB::select('SHOW TABLES');
+        $dumpPath = base_path(env(
+            'DUMPS_PATH',
+            $settings->value(
+                'defr.module.backup_manager::dump_path',
+                'dumps'
+            )
+        ));
+
+        $date = Carbon::now()->format(env(
+            'DUMP_FORMAT',
+            $settings->value(
+                'defr.module.backup_manager::dump_format',
+                'Y-m-d_H:i:s_'
+            )
+        ));
+
+        $tables = DB::select('SHOW TABLES');
 
         if (!$database = $this->database)
         {
