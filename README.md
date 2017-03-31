@@ -14,7 +14,7 @@ A graphical user interface (GUI), allowing you to backup PyroCMS database and ta
 * Install it using the PyroCMS or simply run the following command `php artisan module:install backup_manager`
 * A new menu item will appear in your admin.
 
-### Cretae a backup
+### Create a backup
 * Click the menu item "Backup Manager".
 * Then click the button "Make Dump".
 * Enter the name of the backup you are to create. Select addon to backup or nothing to select the complete database.
