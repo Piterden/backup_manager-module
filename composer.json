@@ -4,10 +4,11 @@
     "type": "streams-addon",
     "version": "0.1.0",
     "keywords": [
-        "streams",
         "pyrocms",
+        "streams",
         "backup",
-        "dump"
+        "dump",
+        "laravel-cms"
     ],
     "authors": [
         {
