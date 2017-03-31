@@ -16,7 +16,7 @@ A graphical user interface (GUI), allowing you to backup PyroCMS database and ta
 
 ### Create a backup
 * Click the menu item "Backup Manager".
-* Then click the button "Make Dump".
+* Then click the button "Create a dump".
 * Enter the name of the backup you are to create. Select addon to backup or nothing to select the complete database.
 * Press save and you are done.
 
