@@ -19,6 +19,9 @@
     "autoload": {
         "psr-4": {
             "Defr\\BackupManagerModule\\": "src/"
-        }
+        },
+        "files": [
+            "src/Support/_helpers.php"
+        ]
     }
 }

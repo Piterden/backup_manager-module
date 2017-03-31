@@ -22,6 +22,7 @@ class DumpTableBuilder extends TableBuilder
      */
     protected $columns = [
         'entry.id',
+        'title',
         'path'               => [
             'heading' => 'module::field.title.name',
             'value'   => 'entry.name',

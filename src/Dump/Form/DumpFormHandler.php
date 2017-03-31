@@ -26,6 +26,8 @@ class DumpFormHandler
             }
         }
 
-        $builder->getForm()->removeField('addon')->removeField('database');
+        $builder->getForm()->removeField('database');
+
+        $entry->save();
     }
 }
