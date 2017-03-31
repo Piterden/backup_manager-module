@@ -2,7 +2,7 @@
 
 return [
     'count' => [
-        'name' => 'Count of Tables',
+        'name' => 'Table count',
     ],
     'path'  => [
         'name' => 'Path',
