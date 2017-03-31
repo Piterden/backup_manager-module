@@ -9,10 +9,7 @@ class DumpFormFields
     {
         $builder->setFields([
             'title',
-            'addon'    => [
-                'type'  => 'anomaly.field_type.addon',
-                'label' => 'module::field.addon.name',
-            ],
+            'addon',
             'database' => [
                 'type'   => 'anomaly.field_type.select',
                 'label'  => 'module::field.database.name',
@@ -26,7 +23,6 @@ class DumpFormFields
                     },
                 ],
             ],
-            'path',
         ]);
     }
 }

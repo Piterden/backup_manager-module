@@ -23,6 +23,9 @@ class DefrModuleBackupManagerCreateDumpsStream extends Migration
      */
     protected $assignments = [
         'title',
+        'addon' => [
+            'required' => true,
+        ],
         'path',
     ];
 
