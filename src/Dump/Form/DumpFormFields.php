@@ -1,5 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Form;
 
+use Anomaly\Streams\Platform\Addon\AddonCollection;
 use Illuminate\Config\Repository;
 
 class DumpFormFields
@@ -9,7 +10,20 @@ class DumpFormFields
     {
         $builder->setFields([
             'title',
-            'addon',
+            'addon'    => [
+                'config' => [
+                    'mode' => 'search',
+                    'options' => function (AddonCollection $addons)
+                    {
+                        return $addons->installed()->mapWithKeys(
+                            function ($addon)
+                            {
+                                return [$addon->getNamespace() => $addon->getName()];
+                            }
+                        )->toArray();
+                    },
+                ],
+            ],
             'database' => [
                 'type'   => 'anomaly.field_type.select',
                 'label'  => 'module::field.database.name',

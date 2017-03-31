@@ -1,5 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
+use Anomaly\SettingsModule\Setting\Contract\SettingRepositoryInterface;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 use Illuminate\Filesystem\Filesystem;
 
@@ -16,11 +17,16 @@ class GetDumps
     /**
      * Handle the command
      *
-     * @param  Filesystem              $files The files
-     * @param  DumpRepositoryInterface $dumps The dumps
+     * @param  Filesystem                 $files    The files
+     * @param  DumpRepositoryInterface    $dumps    The dumps
+     * @param  SettingRepositoryInterface $settings The settings
      * @return DumpCollection
      */
-    public function handle(Filesystem $files, DumpRepositoryInterface $dumps)
+    public function handle(
+        Filesystem $files,
+        DumpRepositoryInterface $dumps,
+        SettingRepositoryInterface $settings
+    )
     {
         $path    = base_path(env('DUMPS_PATH', 'dumps'));
         $list    = $files->glob($path.'/*sql.json');
