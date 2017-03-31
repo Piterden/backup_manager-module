@@ -3,6 +3,13 @@
 use Anomaly\Streams\Platform\Model\BackupManager\BackupManagerDumpsEntryModel;
 use Defr\BackupManagerModule\Dump\Contract\DumpInterface;
 
+/**
+ * Dump model class
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
 {
 
@@ -34,18 +41,6 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
     }
 
     /**
-     * Sets the title.
-     *
-     * @return string The title.
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
      * Gets the path.
      *
      * @return string The path.
@@ -65,6 +60,16 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
         $this->path = $path;
 
         return $this;
+    }
+
+    /**
+     * Gets the addon.
+     *
+     * @return string The addon.
+     */
+    public function getAddon()
+    {
+        return $this->addon;
     }
 
     /**
@@ -103,7 +108,7 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
     /**
      * Gets the created on.
      *
-     * @return     <type>  The created on.
+     * @return <type> The created on.
      */
     public function getCreatedAt()
     {
@@ -113,7 +118,7 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
     /**
      * Gets the updated on.
      *
-     * @return     <type>  The updated on.
+     * @return <type> The updated on.
      */
     public function getUpdatedAt()
     {

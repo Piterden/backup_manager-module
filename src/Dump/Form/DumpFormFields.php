@@ -3,17 +3,30 @@
 use Anomaly\Streams\Platform\Addon\AddonCollection;
 use Illuminate\Config\Repository;
 
+/**
+ * Class for handle dump form fields
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpFormFields
 {
 
+    /**
+     * Handle form fields
+     *
+     * @param DumpFormBuilder $builder The builder
+     */
     public function handle(DumpFormBuilder $builder)
     {
-        $builder->setFields([
+        $fields = [
             'title',
-            'addon'    => [
+            'addon'      => [
                 'config' => [
-                    'mode' => 'search',
-                    'options' => function (AddonCollection $addons)
+                    'mode'          => 'search',
+                    'default_value' => 'anomaly.module.pages',
+                    'options'       => function (AddonCollection $addons)
                     {
                         return $addons->installed()->mapWithKeys(
                             function ($addon)
@@ -24,19 +37,30 @@ class DumpFormFields
                     },
                 ],
             ],
-            'database' => [
-                'type'   => 'anomaly.field_type.select',
-                'label'  => 'module::field.database.name',
-                'config' => [
-                    'default_value' => 'mysql',
-                    'options'       => function (Repository $config)
-                    {
-                        $array = array_keys($config->get('database.connections'));
+            // 'connection' => [
+            //     'config' => [
+            //         'mode'          => 'search',
+            //         'default_value' => 'mysql',
+            //         'options'       => function (Repository $config)
+            //         {
+            //             $connections = array_keys($config->get('database.connections'));
 
-                        return array_combine($array, $array);
-                    },
-                ],
-            ],
-        ]);
+            //             return array_combine($connections, $connections);
+            //         },
+            //     ],
+            // ],
+        ];
+
+        if ($builder->getForm()->getMode() == 'edit')
+        {
+            $fields['path'] = [
+                'disabled' => true,
+            ];
+// dd($builder->getFormEntry()->);
+            $fields['addon']['disabled'] = true;
+            $fields['addon']['value'] = $builder->getFormEntry()->getAddon();
+        }
+
+        $builder->setFields($fields);
     }
 }

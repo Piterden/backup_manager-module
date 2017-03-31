@@ -49,19 +49,19 @@ class RestoreDump
     {
         if ($files->exists($this->path))
         {
-            if ($dupm_data = json_decode($files->get($this->path), true))
+            if ($dupmData = json_decode($files->get($this->path), true))
             {
-                $app_ref = $this->app->getReference();
+                $appReference = $this->app->getReference();
 
-                foreach ($dupm_data as $table_name => $table_rows)
+                foreach ($dupmData as $tableName => $tableRows)
                 {
-                    $table_name = str_replace($app_ref.'_', '', $table_name);
+                    $tableName = str_replace($appReference.'_', '', $tableName);
 
-                    DB::table($table_name)->truncate();
+                    DB::table($tableName)->truncate();
 
-                    foreach ($table_rows as $row_index => $row_data)
+                    foreach ($tableRows as $rowData)
                     {
-                        DB::table($table_name)->insert($row_data);
+                        DB::table($tableName)->insert($rowData);
                     }
                 }
             }

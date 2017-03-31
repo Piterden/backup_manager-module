@@ -28,9 +28,12 @@ class GetDumps
         SettingRepositoryInterface $settings
     )
     {
-        $path    = base_path(env('DUMPS_PATH', 'dumps'));
+        $path = base_path(env(
+            'DUMPS_PATH',
+            $settings->value('defr.module.backup_manager::dump_path', 'dumps')
+        ));
+
         $list    = $files->glob($path.'/*sql.json');
-        $id      = 1;
         $entries = [];
 
         foreach ($list as $path)

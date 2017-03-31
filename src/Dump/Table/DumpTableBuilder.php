@@ -21,17 +21,28 @@ class DumpTableBuilder extends TableBuilder
      * @var array|string
      */
     protected $columns = [
-        'entry.id',
-        'title',
-        'path'               => [
-            'heading' => 'module::field.title.name',
-            'value'   => 'entry.name',
+        'title'              => [
+            'wrapper' => '<h3>{value}</h3>',
         ],
-        'entry.size',
+        'path'               => [
+            'heading' => 'module::table.filename.name',
+            'value'   => 'entry.file_name',
+            'wrapper' => '<strong>{value}</strong>',
+        ],
+        'addon'              => [
+            'value'   => 'entry.addon_name',
+            'wrapper' => '<strong>{value}</strong>',
+        ],
+        'entry.size'         => [
+            'wrapper' => '<h5>{value}</h5>',
+        ],
         'entry.tables_count' => [
             'heading' => 'module::table.count.name',
+            'wrapper' => '<center>{value}</center>',
         ],
-        'entry.created_at',
+        'created_at'         => [
+            'value' => 'entry.created_at_datetime',
+        ],
     ];
 
     /**

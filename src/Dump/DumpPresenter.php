@@ -1,7 +1,15 @@
 <?php namespace Defr\BackupManagerModule\Dump;
 
+use Anomaly\Streams\Platform\Addon\Command\GetAddon;
 use Anomaly\Streams\Platform\Entry\EntryPresenter;
 
+/**
+ * Dump presenter class
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpPresenter extends EntryPresenter
 {
 
@@ -10,18 +18,9 @@ class DumpPresenter extends EntryPresenter
      *
      * @return string The path.
      */
-    public function getName()
+    public function getFileName()
     {
-        if (!$name = $this->object->getTitle())
-        {
-            $name = str_replace(
-                base_path(env('DUMPS_PATH', 'dumps')).'/',
-                '',
-                $this->object->getPath()
-            );
-        }
-
-        return "<h4>{$name}</h4>";
+        return array_get(array_reverse(explode('/', $this->object->getPath())), 0);
     }
 
     /**
@@ -31,9 +30,19 @@ class DumpPresenter extends EntryPresenter
      */
     public function getSize()
     {
-        $size = human_filesize($this->object->getSize());
+        return human_filesize($this->object->getSize());
+    }
 
-        return "<h5>{$size}</h5>";
+    /**
+     * Gets the addon name.
+     *
+     * @return string The addon name.
+     */
+    public function getAddonName()
+    {
+        return trans($this->dispatch(
+            new GetAddon($this->object->getAddon())
+        )->getName());
     }
 
     /**

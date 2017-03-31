@@ -4,7 +4,7 @@ use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 use Illuminate\Filesystem\Filesystem;
 
 /**
- * Class for delete dump from the filesystem
+ * Class for load info about dump
  *
  * @package defr.module.backup_manager
  *

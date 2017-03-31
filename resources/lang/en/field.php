@@ -13,7 +13,7 @@ return [
     'addon'  => [
         'name' => 'Addon',
     ],
-    'database'  => [
-        'name' => 'Database',
+    'connection'  => [
+        'name' => 'Connection',
     ],
 ];

@@ -3,6 +3,13 @@
 use Anomaly\Streams\Platform\Entry\EntryRepository;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 
+/**
+ * Dump repository class
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpRepository extends EntryRepository implements DumpRepositoryInterface
 {
 

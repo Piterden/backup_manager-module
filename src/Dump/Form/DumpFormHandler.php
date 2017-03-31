@@ -1,6 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Form;
 
-use Defr\BackupManagerModule\Dump\Command\MakeDump;
+use Defr\BackupManagerModule\Dump\Command\CreateDump;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class DumpFormHandler
@@ -14,20 +14,24 @@ class DumpFormHandler
      */
     public function handle(DumpFormBuilder $builder)
     {
-        $entry    = $builder->getFormEntry();
-        $addon    = $builder->getForm()->getValue('addon');
-        $database = $builder->getForm()->getValue('database');
-
-        if (!$entry->getPath())
+        if (!$builder->canSave())
         {
-            if ($path = $this->dispatch(new MakeDump($database, null, $addon)))
+            return;
+        }
+
+        $entry = $builder->getFormEntry();
+
+        if ($builder->getForm()->getMode() == 'create')
+        {
+            $connection = $builder->getForm()->getValue('connection');
+            $addon      = $builder->getForm()->getValue('addon');
+
+            if ($path = $this->dispatch(new CreateDump($connection, null, $addon)))
             {
                 $entry->setPath($path);
             }
         }
 
-        $builder->getForm()->removeField('database');
-
-        $entry->save();
+        $builder->saveForm();
     }
 }

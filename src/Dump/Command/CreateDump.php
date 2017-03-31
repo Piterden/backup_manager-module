@@ -13,22 +13,22 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class for write the dump to filesystem
+ * Class for create dump in the filesystem
  *
  * @package defr.module.backup_manager
  *
  * @author Denis Efremov <efremov.a.denis@gmail.com>
  */
-class MakeDump
+class CreateDump
 {
     use DispatchesJobs;
 
     /**
-     * Database to work with
+     * Connection to work with
      *
      * @var string
      */
-    protected $database;
+    protected $connection;
 
     /**
      * Tables to dump
@@ -52,17 +52,17 @@ class MakeDump
     protected $app;
 
     /**
-     * Create an instance fo MakeDump class
+     * Create an instance fo CreateDump class
      *
-     * @param string       $database The database connection
-     * @param string       $tables   The tables
-     * @param Addon|string $addon    The addon
+     * @param null|string       $connection DB connection
+     * @param null|string       $tables     The tables
+     * @param null|Addon|string $addon      The addon
      */
-    public function __construct($database = '', $tables = '', $addon = null)
+    public function __construct($connection = null, $tables = null, $addon = null)
     {
-        $this->database = $database;
-        $this->tables   = $tables;
-        $this->app      = app(Application::class);
+        $this->connection = $connection;
+        $this->tables     = $tables;
+        $this->app        = app(Application::class);
 
         if (is_object($addon))
         {
@@ -81,7 +81,7 @@ class MakeDump
      * @param  Filesystem                 $files    The files
      * @param  Repository                 $config   The configuration
      * @param  SettingRepositoryInterface $settings The settings
-     * @return boolean|string             Path of made file
+     * @return null|string                Path of made file
      */
     public function handle(
         Filesystem $files,
@@ -107,14 +107,14 @@ class MakeDump
 
         $tables = DB::select('SHOW TABLES');
 
-        if (!$database = $this->database)
+        if (!$connection = $this->connection)
         {
-            $database = $config->get('database.default');
+            $connection = $config->get('database.default');
         }
 
         $includedTables = [];
-        $db_name        = $config->get('database.connections.'.$database.'.database');
-        $class_name     = 'Tables_in_'.$db_name;
+        $dbName         = $config->get('database.connections.'.$connection.'.database');
+        $className      = 'Tables_in_'.$dbName;
         $appReference   = $this->app->getReference();
 
         if ($this->tables)
@@ -136,9 +136,9 @@ class MakeDump
             {
                 foreach ($tables as $table)
                 {
-                    if (starts_with($table->$class_name, $appReference.'_'.$slug.'_'))
+                    if (starts_with($table->$className, $appReference.'_'.$slug.'_'))
                     {
-                        $includedTables[] = $table->$class_name;
+                        $includedTables[] = $table->$className;
                     }
                 }
             }
@@ -155,7 +155,7 @@ class MakeDump
         {
             if (is_object($table))
             {
-                $table = $table->$class_name;
+                $table = $table->$className;
             }
 
             $table = trim($table);
@@ -175,14 +175,14 @@ class MakeDump
 
         if (!$files->isDirectory($dumpPath))
         {
-            return false;
+            return null;
         }
 
-        $dump_file = $dumpPath.'/'.$date.$db_name.'_dump.sql.json';
+        $dumpFile = $dumpPath.'/'.$date.$dbName.'_dump.sql.json';
 
-        if ($files->put($dump_file, json_encode($array)))
+        if ($files->put($dumpFile, json_encode($array)))
         {
-            return $dump_file;
+            return $dumpFile;
         }
     }
 
