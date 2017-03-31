@@ -3,7 +3,7 @@
 return [
     'title'       => 'Backup Manager',
     'name'        => 'Backup Manager Module',
-    'description' => 'Managing of DB backups',
+    'description' => 'Create and Restore database backups',
     'section'     => [
         'dumps' => 'DB Dumps',
     ],

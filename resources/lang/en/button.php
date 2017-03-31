@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'new_dump'       => 'Make a dump',
+    'new_dump'       => 'Create a dump',
 ];
