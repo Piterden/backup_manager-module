@@ -2,7 +2,7 @@
     "name": "defr/backup_manager-module",
     "description": "Backup Manager for Streams Platform",
     "type": "streams-addon",
-    "version": "0.1.0",
+    "version": "0.1.0.0",
     "keywords": [
         "pyrocms",
         "streams",
