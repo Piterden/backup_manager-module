@@ -2,9 +2,18 @@
 
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
 use Defr\BackupManagerModule\Dump\Command\LoadInfo;
+use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 use Defr\BackupManagerModule\Dump\Form\DumpFormBuilder;
 use Defr\BackupManagerModule\Dump\Table\DumpTableBuilder;
+use Illuminate\Contracts\Config\Repository;
 
+/**
+ * Dumps admin controller
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class DumpsController extends AdminController
 {
 
@@ -27,18 +36,46 @@ class DumpsController extends AdminController
      */
     public function create(DumpFormBuilder $form)
     {
+        $form->setDbConnection($this->request->get('db_connection'));
+
         return $form->render();
+    }
+
+    /**
+     * Create a new entry.
+     *
+     * @param  DumpFormBuilder $form
+     * @param  Repository      $config The configuration
+     * @return Response
+     */
+    public function choose(DumpFormBuilder $form, Repository $config)
+    {
+        $connections = $config->get('database.connections');
+
+        return view(
+            'defr.module.backup_manager::admin/dumps/choose_connection',
+            compact('connections')
+        );
     }
 
     /**
      * Edit an existing entry.
      *
-     * @param  DumpFormBuilder $form
-     * @param  $id
+     * @param  DumpRepositoryInterface $dumps  The dumps
+     * @param  DumpFormBuilder         $form
+     * @param  int                     $id
      * @return Response
      */
-    public function edit(DumpFormBuilder $form, $id)
+    public function edit(
+        DumpRepositoryInterface $dumps,
+        DumpFormBuilder $form,
+        $id
+    )
     {
+        $entry = $dumps->find($id);
+
+        $form->setDbConnection($entry->getDbConnection());
+
         return $form->render($id);
     }
 

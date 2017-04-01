@@ -40,9 +40,12 @@ class DumpPresenter extends EntryPresenter
      */
     public function getAddonName()
     {
-        return trans($this->dispatch(
-            new GetAddon($this->object->getAddon())
-        )->getName());
+        if ($addon = $this->dispatch(new GetAddon($this->object->getAddon())))
+        {
+            return trans($addon->getName());
+        }
+
+        return 'unknown';
     }
 
     /**

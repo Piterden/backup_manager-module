@@ -21,14 +21,18 @@ class DumpFormHandler
 
         $entry = $builder->getFormEntry();
 
+        $connection = $builder->getDbConnection();
+
         if ($builder->getForm()->getMode() == 'create')
         {
-            $connection = $builder->getForm()->getValue('connection');
-            $addon      = $builder->getForm()->getValue('addon');
+            $addon = $builder->getFormValue('addon');
 
             if ($path = $this->dispatch(new CreateDump($connection, null, $addon)))
             {
                 $entry->setPath($path);
+                $entry->setDbConnection($connection);
+
+                $entry->save();
             }
         }
 

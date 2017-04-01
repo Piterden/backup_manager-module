@@ -9,10 +9,17 @@
         "dump",
         "laravel-cms"
     ],
-    "authors": [{
-        "name": "Denis Efremov",
+    "authors": [
+        {
+            "name": "Denis Efremov",
+            "email": "efremov.a.denis@gmail.com",
+            "homepage": "http://pyrocms.com/",
+            "role": "developer"
+        }
+    ],
+    "support": {
         "email": "efremov.a.denis@gmail.com"
-    }],
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {

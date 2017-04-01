@@ -1,19 +1,19 @@
 <?php
 
 return [
-    'title' => [
+    'title'         => [
         'name' => 'Title',
     ],
-    'path'  => [
+    'path'          => [
         'name' => 'Path',
     ],
-    'size'  => [
+    'size'          => [
         'name' => 'Size',
     ],
-    'addon'  => [
+    'addon'         => [
         'name' => 'Addon',
     ],
-    'connection'  => [
+    'db_connection' => [
         'name' => 'Connection',
     ],
 ];

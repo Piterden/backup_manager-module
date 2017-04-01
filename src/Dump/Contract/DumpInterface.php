@@ -48,6 +48,13 @@ interface DumpInterface extends EntryInterface
     public function getContent();
 
     /**
+     * Gets the content.
+     *
+     * @return string The content.
+     */
+    public function getDbConnection();
+
+    /**
      * Gets the created on.
      *
      * @return <type> The created on.

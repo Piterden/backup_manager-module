@@ -7,7 +7,7 @@ use Anomaly\Streams\Platform\Addon\Module\Module;
 use Anomaly\Streams\Platform\Application\Application;
 use Anomaly\Streams\Platform\Stream\Command\GetStreams;
 use Carbon\Carbon;
-use Illuminate\Config\Repository;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +28,7 @@ class CreateDump
      *
      * @var string
      */
-    protected $connection;
+    protected $dbConnection;
 
     /**
      * Tables to dump
@@ -54,15 +54,15 @@ class CreateDump
     /**
      * Create an instance fo CreateDump class
      *
-     * @param null|string       $connection DB connection
-     * @param null|string       $tables     The tables
-     * @param null|Addon|string $addon      The addon
+     * @param null|string       $dbConnection DB db_connection
+     * @param null|string       $tables       The tables
+     * @param null|Addon|string $addon        The addon
      */
-    public function __construct($connection = null, $tables = null, $addon = null)
+    public function __construct($dbConnection = null, $tables = null, $addon = null)
     {
-        $this->connection = $connection;
-        $this->tables     = $tables;
-        $this->app        = app(Application::class);
+        $this->dbConnection = $dbConnection;
+        $this->tables       = $tables;
+        $this->app          = app(Application::class);
 
         if (is_object($addon))
         {
@@ -107,13 +107,13 @@ class CreateDump
 
         $tables = DB::select('SHOW TABLES');
 
-        if (!$connection = $this->connection)
+        if (!$dbConnection = $this->dbConnection)
         {
-            $connection = $config->get('database.default');
+            $dbConnection = $config->get('database.default');
         }
 
         $includedTables = [];
-        $dbName         = $config->get('database.connections.'.$connection.'.database');
+        $dbName         = $config->get('database.connections.'.$dbConnection.'.database');
         $className      = 'Tables_in_'.$dbName;
         $appReference   = $this->app->getReference();
 

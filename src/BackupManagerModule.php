@@ -2,6 +2,13 @@
 
 use Anomaly\Streams\Platform\Addon\Module\Module;
 
+/**
+ * Module class
+ *
+ * @package defr.module.backup_manager
+ *
+ * @author Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class BackupManagerModule extends Module
 {
 
@@ -21,7 +28,10 @@ class BackupManagerModule extends Module
         'dumps' => [
             'buttons' => [
                 'new_dump' => [
-                    'class' => 'btn-warning',
+                    'class'       => 'btn-warning',
+                    'data-toggle' => 'modal',
+                    'data-target' => '#modal',
+                    'href'        => 'admin/backup_manager/choose',
                 ],
             ],
         ],

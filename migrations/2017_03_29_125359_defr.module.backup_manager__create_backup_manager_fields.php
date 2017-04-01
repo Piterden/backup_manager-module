@@ -11,10 +11,10 @@ class DefrModuleBackupManagerCreateBackupManagerFields extends Migration
      * @var array
      */
     protected $fields = [
-        'title'      => 'anomaly.field_type.text',
-        'addon'      => 'anomaly.field_type.select',
-        'path'       => 'anomaly.field_type.text',
-        'connection' => 'anomaly.field_type.select',
+        'title'         => 'anomaly.field_type.text',
+        'addon'         => 'anomaly.field_type.select',
+        'path'          => 'anomaly.field_type.text',
+        'db_connection' => 'anomaly.field_type.select',
     ];
 
 }

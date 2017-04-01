@@ -124,4 +124,27 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
     {
         return $this->updated_at;
     }
+
+    /**
+     * Gets the database connection.
+     *
+     * @return string The database connection.
+     */
+    public function getDbConnection()
+    {
+        return $this->db_connection;
+    }
+
+    /**
+     * Sets the database connection.
+     *
+     * @param  string  The database connection.
+     * @return $this
+     */
+    public function setDbConnection($db_connection)
+    {
+        $this->db_connection = $db_connection;
+
+        return $this;
+    }
 }

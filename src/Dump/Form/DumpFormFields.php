@@ -1,7 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Form;
 
 use Anomaly\Streams\Platform\Addon\AddonCollection;
-use Illuminate\Config\Repository;
 
 /**
  * Class for handle dump form fields
@@ -22,7 +21,7 @@ class DumpFormFields
     {
         $fields = [
             'title',
-            'addon'      => [
+            'addon'         => [
                 'config' => [
                     'mode'          => 'search',
                     'default_value' => 'anomaly.module.pages',
@@ -37,28 +36,36 @@ class DumpFormFields
                     },
                 ],
             ],
-            // 'connection' => [
-            //     'config' => [
-            //         'mode'          => 'search',
-            //         'default_value' => 'mysql',
-            //         'options'       => function (Repository $config)
-            //         {
-            //             $connections = array_keys($config->get('database.connections'));
-
-            //             return array_combine($connections, $connections);
-            //         },
-            //     ],
-            // ],
+            'db_connection' => [
+                'type'     => 'anomaly.field_type.select',
+                'disabled' => true,
+                'value'    => $builder->getDbConnection(),
+                'options'  => [
+                    $builder->getDbConnection(),
+                ],
+            ],
         ];
 
         if ($builder->getForm()->getMode() == 'edit')
         {
-            $fields['path'] = [
-                'disabled' => true,
-            ];
-// dd($builder->getFormEntry()->);
-            $fields['addon']['disabled'] = true;
-            $fields['addon']['value'] = $builder->getFormEntry()->getAddon();
+            $builder->setFields(array_merge($fields, [
+                'path'  => [
+                    'disabled' => true,
+                ],
+                'addon' => array_merge(
+                    array_get($fields, 'addon'),
+                    array_merge(
+                        array_get($fields, 'addon.config'),
+                        [
+                            'disabled' => true,
+                            'mode'     => 'dropdown',
+                            'value'    => $builder->getFormEntry()->getAddon(),
+                        ]
+                    )
+                ),
+            ]));
+
+            return;
         }
 
         $builder->setFields($fields);
