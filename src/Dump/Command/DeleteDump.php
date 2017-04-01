@@ -1,5 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
+use Anomaly\Streams\Platform\Message\MessageBag;
 use Illuminate\Filesystem\Filesystem;
 
 /**
@@ -35,13 +36,24 @@ class DeleteDump
      * @param  Filesystem $files The files
      * @return string
      */
-    public function handle(Filesystem $files)
+    public function handle(Filesystem $files, MessageBag $messages)
     {
         if ($files->exists($this->path))
         {
-            $files->delete([$this->path]);
+            if ($files->delete([$this->path]))
+            {
+                return redirect()->back()->withInput()->withErrors(
+                    $messages->success('Dump deleted successfully.')
+                );
+            }
+
+            return redirect()->back()->withInput()->withErrors(
+                $messages->error('Can\'t remove dump!')
+            );
         }
 
-        return redirect()->back()->withInput();
+        return redirect()->back()->withInput()->withErrors(
+            $messages->error('Dump file not found!')
+        );
     }
 }

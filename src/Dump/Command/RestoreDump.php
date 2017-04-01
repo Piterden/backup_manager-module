@@ -1,6 +1,7 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
 use Anomaly\Streams\Platform\Application\Application;
+use Anomaly\Streams\Platform\Message\MessageBag;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
@@ -45,15 +46,15 @@ class RestoreDump
      * @param  Filesystem $files The files
      * @return string
      */
-    public function handle(Filesystem $files)
+    public function handle(Filesystem $files, MessageBag $messages)
     {
         if ($files->exists($this->path))
         {
-            if ($dupmData = json_decode($files->get($this->path), true))
+            if ($dumpData = json_decode($files->get($this->path), true))
             {
                 $appReference = $this->app->getReference();
 
-                foreach ($dupmData as $tableName => $tableRows)
+                foreach ($dumpData as $tableName => $tableRows)
                 {
                     $tableName = str_replace($appReference.'_', '', $tableName);
 
@@ -64,9 +65,19 @@ class RestoreDump
                         DB::table($tableName)->insert($rowData);
                     }
                 }
+
+                return redirect()->back()->withInput()->withErrors(
+                    $messages->success(count($dumpData).' tables successfully restored')
+                );
             }
+
+            return redirect()->back()->withInput()->withErrors(
+                $messages->error('JSON syntax error!')
+            );
         }
 
-        return redirect()->back()->withInput();
+        return redirect()->back()->withInput()->withErrors(
+            $messages->error('Dump file not found!')
+        );
     }
 }

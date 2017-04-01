@@ -1,5 +1,6 @@
 <?php namespace Defr\BackupManagerModule\Dump\Command;
 
+use Anomaly\Streams\Platform\Message\MessageBag;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 use Illuminate\Filesystem\Filesystem;
 
@@ -33,12 +34,14 @@ class LoadInfo
     /**
      * Handle the command
      *
-     * @param  Filesystem              $files The files
-     * @param  DumpRepositoryInterface $dumps The dumps
+     * @param  Filesystem              $files    The files
+     * @param  MessageBag              $messages The messages
+     * @param  DumpRepositoryInterface $dumps    The dumps
      * @return Response
      */
     public function handle(
         Filesystem $files,
+        MessageBag $messages,
         DumpRepositoryInterface $dumps
     )
     {
@@ -47,11 +50,13 @@ class LoadInfo
             return view(
                 'defr.module.backup_manager::admin/dumps/info',
                 [
-                    'dump'    => $dump,
+                    'dump' => $dump,
                 ]
             );
         }
 
-        return redirect()->back()->withInput();
+        return redirect()->back()->withInput()->withErrors(
+            $messages->error('Dump entry not found!')
+        );
     }
 }

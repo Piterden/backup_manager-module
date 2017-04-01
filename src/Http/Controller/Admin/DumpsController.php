@@ -66,11 +66,7 @@ class DumpsController extends AdminController
      * @param  int                     $id
      * @return Response
      */
-    public function edit(
-        DumpRepositoryInterface $dumps,
-        DumpFormBuilder $form,
-        $id
-    )
+    public function edit(DumpRepositoryInterface $dumps, DumpFormBuilder $form, $id)
     {
         $entry = $dumps->find($id);
 
