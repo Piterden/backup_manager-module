@@ -45,7 +45,7 @@ class DumpCommand extends Command
             $this->warn($path);
         }
 
-        $this->info('Size: '.human_filesize(filesize($path))
+        $this->info('Size: '.str_replace('&nbsp;', ' ', human_filesize(filesize($path)))
             .'. Time: '.(microtime() - $start).' sec.');
     }
 
