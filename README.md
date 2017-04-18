@@ -37,7 +37,7 @@ Add to `composer.json`:
     ],
 ```
 
-Run `composer update` command.
+Run `composer update` command. It installs module to the `core` folder!
 
 ***
 
