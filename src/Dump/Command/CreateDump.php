@@ -2,7 +2,6 @@
 
 use Anomaly\SettingsModule\Setting\Contract\SettingRepositoryInterface;
 use Anomaly\Streams\Platform\Addon\Command\GetAddon;
-use Anomaly\Streams\Platform\Addon\Extension\Extension;
 use Anomaly\Streams\Platform\Addon\Module\Module;
 use Anomaly\Streams\Platform\Application\Application;
 use Anomaly\Streams\Platform\Stream\Command\GetStreams;
@@ -107,36 +106,32 @@ class CreateDump
 
         $tables = DB::select('SHOW TABLES');
 
-        if (!$dbConnection = $this->dbConnection)
-        {
-            $dbConnection = $config->get('database.default');
-        }
-
         $includedTables = [];
-        $dbName         = $config->get('database.connections.'.$dbConnection.'.database');
-        $className      = 'Tables_in_'.$dbName;
+        $dbConnection   = $this->dbConnection ?: $config->get('database.default');
+        $dbName         = $config->get("database.connections.{$dbConnection}.database");
+        $className      = "Tables_in_{$dbName}";
         $appReference   = $this->app->getReference();
 
-        if ($this->tables)
+        if (is_string($this->tables))
         {
-            $includedTables = array_merge(
-                $includedTables,
-                explode(',', $this->tables)
-            );
+            $this->tables = explode(',', $this->tables);
         }
+
+        $includedTables = array_merge($includedTables, $this->tables);
 
         if ($this->addon)
         {
             $slug = $this->addon->getSlug();
             $path = $this->addon->getPath();
 
-            $migrations = $files->glob($path.'/migrations/*');
-
-            if (count($migrations) > 0)
+            if (count($files->glob("{$path}/migrations/*")) > 0)
             {
                 foreach ($tables as $table)
                 {
-                    if (starts_with($table->$className, $appReference.'_'.$slug.'_'))
+                    if (starts_with(
+                        $table->$className,
+                        "{$appReference}_{$slug}_"
+                    ))
                     {
                         $includedTables[] = $table->$className;
                     }
@@ -149,7 +144,7 @@ class CreateDump
             $tables = $includedTables;
         }
 
-        $array = [];
+        $dump = [];
 
         foreach ($tables as $table)
         {
@@ -160,12 +155,17 @@ class CreateDump
 
             $table = trim($table);
 
-            if (!starts_with($table, $appReference.'_') && !starts_with($table, 'applications'))
+            if (!starts_with($table, "{$appReference}_")
+                && !starts_with($table, 'applications'))
             {
-                $table = $appReference.'_'.$table;
+                $table = "{$appReference}_{$table}";
             }
 
-            $array[$table] = DB::select('SELECT * FROM '.$table, [1]);
+            array_set(
+                $dump,
+                $table,
+                DB::select('SELECT * FROM ' . $table, [1])
+            );
         }
 
         if (!$files->exists($dumpPath))
@@ -175,15 +175,21 @@ class CreateDump
 
         if (!$files->isDirectory($dumpPath))
         {
-            return null;
+            $messages->error('Can\'t create directory!');
+
+            return false;
         }
 
-        $dumpFile = $dumpPath.'/'.$date.$dbName.'_dump.sql.json';
+        $dumpFile = "{$dumpPath}/{$date}{$dbName}_dump.sql.json";
 
-        if ($files->put($dumpFile, json_encode($array)))
+        if (!$files->put($dumpFile, json_encode($dump, true)))
         {
-            return $dumpFile;
+            $messages->error('Can\'t create file!');
+
+            return false;
         }
+
+        return $dumpFile;
     }
 
     /**
@@ -195,7 +201,7 @@ class CreateDump
     public function getStreams($slug)
     {
         return $this->dispatch(new GetStreams($slug))->filter(
-            function ($stream)
+            function (StreamInterface $stream)
             {
                 return !str_contains($stream->getSlug(), '_');
             }

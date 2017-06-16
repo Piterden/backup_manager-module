@@ -30,7 +30,7 @@ class DumpPresenter extends EntryPresenter
      */
     public function getSize()
     {
-        return human_filesize($this->object->getSize());
+        return filesize_for_humans($this->object->getSize());
     }
 
     /**
@@ -45,7 +45,7 @@ class DumpPresenter extends EntryPresenter
             return trans($addon->getName());
         }
 
-        return 'unknown';
+        return 'all';
     }
 
     /**

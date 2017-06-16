@@ -3,6 +3,7 @@ namespace Defr\BackupManagerModule;
 
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
 use Anomaly\Streams\Platform\Model\BackupManager\BackupManagerDumpsEntryModel;
+use Defr\BackupManagerModule\Command\RegisterButtons;
 use Defr\BackupManagerModule\Dump\Console\DumpCommand;
 use Defr\BackupManagerModule\Dump\Console\ListCommand;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;

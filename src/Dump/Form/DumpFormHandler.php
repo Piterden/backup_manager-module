@@ -16,24 +16,37 @@ class DumpFormHandler
     {
         if (!$builder->canSave())
         {
-            return;
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('You are not allowed to save entry!'));
         }
 
-        $entry = $builder->getFormEntry();
+        if ($builder->getFormMode() !== 'create')
+        {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('You can\'t edit dumps!'));
+        }
 
+        if (!$addon = $builder->getFormValue('addon'))
+        {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('Please, set the addon!'));
+        }
+
+        /* @var EntryInterface $entry */
+        $entry      = $builder->getFormEntry();
         $connection = $builder->getDbConnection();
 
-        if ($builder->getForm()->getMode() == 'create')
+        if ($path = $this->dispatch(new CreateDump($connection, null, $addon)))
         {
-            $addon = $builder->getFormValue('addon');
-
-            if ($path = $this->dispatch(new CreateDump($connection, null, $addon)))
-            {
-                $entry->setPath($path);
-                $entry->setDbConnection($connection);
-
-                $entry->save();
-            }
+            $entry->setPath($path);
+            $entry->setDbConnection($connection);
+            $entry->save();
         }
 
         $builder->saveForm();

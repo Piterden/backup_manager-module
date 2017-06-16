@@ -45,18 +45,19 @@ class LoadInfo
         DumpRepositoryInterface $dumps
     )
     {
-        if ($dump = $dumps->find($this->id))
+        if (!$dump = $dumps->find($this->id))
         {
-            return view(
-                'defr.module.backup_manager::admin/dumps/info',
-                [
-                    'dump' => $dump,
-                ]
-            );
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('Dump entry not found!'));
         }
 
-        return redirect()->back()->withInput()->withErrors(
-            $messages->error('Dump entry not found!')
+        return view(
+            'defr.module.backup_manager::admin/dumps/info',
+            [
+                'dump' => $dump,
+            ]
         );
     }
 }

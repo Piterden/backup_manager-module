@@ -27,6 +27,13 @@ interface DumpInterface extends EntryInterface
     public function getPath();
 
     /**
+     * Sets the path.
+     *
+     * @return string The path.
+     */
+    public function setPath($path);
+
+    /**
      * Gets the addon.
      *
      * @return string The addon.
@@ -48,11 +55,12 @@ interface DumpInterface extends EntryInterface
     public function getContent();
 
     /**
-     * Gets the content.
+     * Sets the content.
      *
-     * @return string The content.
+     * @param  string  $content The content
+     * @return $this
      */
-    public function getDbConnection();
+    public function setContent($content);
 
     /**
      * Gets the created on.
@@ -67,4 +75,26 @@ interface DumpInterface extends EntryInterface
      * @return <type> The updated on.
      */
     public function getUpdatedAt();
+
+    /**
+     * Gets the database connection.
+     *
+     * @return string The database connection.
+     */
+    public function getDbConnection();
+
+    /**
+     * Sets the database connection.
+     *
+     * @param  string  The database connection.
+     * @return $this
+     */
+    public function setDbConnection($db_connection);
+
+    /**
+     * Gets the default database connection.
+     *
+     * @return string The default database connection.
+     */
+    public function getDefaultDbConnection();
 }

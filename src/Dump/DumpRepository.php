@@ -1,6 +1,7 @@
 <?php namespace Defr\BackupManagerModule\Dump;
 
 use Anomaly\Streams\Platform\Entry\EntryRepository;
+use Defr\BackupManagerModule\Dump\Contract\DumpInterface;
 use Defr\BackupManagerModule\Dump\Contract\DumpRepositoryInterface;
 
 /**
@@ -44,35 +45,76 @@ class DumpRepository extends EntryRepository implements DumpRepositoryInterface
     /**
      * Sync DB with real FS files
      *
-     * @param array $files The files
+     * @param  array            $files The files
+     * @return DumpCollection
      */
     public function sync(array $files)
     {
+        /* @var Collection $filesEntries */
         $filesEntries = collect($files);
-        $dbEntries    = $this->model->get()->mapWithKeys(function ($entry)
-        {
-            return [$entry->getPath() => $entry];
-        });
 
-        $deletingEntries = $dbEntries->diffKeys($filesEntries)->toArray();
-        $creatingEntries = $filesEntries->diffKeys($dbEntries)->toArray();
+        /* @var DumpCollection $dbEntries */
+        $dbEntries = $this->getDbEntries();
 
-        foreach ($creatingEntries as $path => $file)
+        $this->deleteEntries($dbEntries->diffKeys($filesEntries)->toArray());
+        $this->createEntries($filesEntries->diffKeys($dbEntries)->toArray());
+
+        return $this->model->get();
+    }
+
+    /**
+     * Creates entries.
+     *
+     * @param array $entries The entries
+     */
+    protected function createEntries(array $entries)
+    {
+        foreach ($entries as $path => $file)
         {
             /* @var DumpInterface $entry */
-            $entry = $this->create(array_except($file, ['content']));
-            $entry->setContent(
-                array_get($file, 'content')
-            );
-        }
+            if (!$entry = $this->create(array_except($file, ['content'])))
+            {
+                throw new \Exception('Error create entry!', 1);
+            }
 
-        foreach ($deletingEntries as $path => $model)
+            $entry->setContent(array_get($file, 'content'));
+        }
+    }
+
+    /**
+     * Delete entries.
+     *
+     * @param array $entries The entries
+     */
+    protected function deleteEntries(array $entries)
+    {
+        foreach ($entries as $path => $model)
         {
-            $entry = $dbEntries->get($path);
+            /* @var DumpInterface $entry */
+            if (!$entry = $this->getDbEntries()->get($path))
+            {
+                throw new \Exception('Error entry not found!', 1);
+            }
 
             $entry->delete();
         }
+    }
 
-        return $this->model->get();
+    /**
+     * Gets the database entries.
+     *
+     * @return DumpCollection The database entries.
+     */
+    protected function getDbEntries()
+    {
+        return $this->model->get()->mapWithKeys(
+            /* @var DumpInterface $entry */
+            function (DumpInterface $entry)
+            {
+                return [
+                    $entry->getPath() => $entry,
+                ];
+            }
+        );
     }
 }

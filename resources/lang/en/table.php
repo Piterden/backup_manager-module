@@ -10,4 +10,7 @@ return [
     'size'  => [
         'name' => 'Size',
     ],
+    'filename'  => [
+        'name' => 'Filename',
+    ],
 ];

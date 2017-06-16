@@ -21,6 +21,6 @@ class DumpTableEntries
      */
     public function handle(DumpTableBuilder $builder)
     {
-        $builder->getTable()->setEntries($this->dispatch(new GetDumps()));
+        $builder->getTableEntries($this->dispatch(new GetDumps()));
     }
 }

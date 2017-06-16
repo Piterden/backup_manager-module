@@ -19,55 +19,53 @@ class DumpFormFields
      */
     public function handle(DumpFormBuilder $builder)
     {
-        $fields = [
-            'title',
-            'addon'         => [
-                'config' => [
-                    'mode'          => 'search',
-                    'default_value' => 'anomaly.module.pages',
-                    'options'       => function (AddonCollection $addons)
-                    {
-                        return $addons->installed()->mapWithKeys(
-                            function ($addon)
-                            {
-                                return [$addon->getNamespace() => $addon->getName()];
-                            }
-                        )->toArray();
-                    },
-                ],
-            ],
-            'db_connection' => [
-                'type'     => 'anomaly.field_type.select',
-                'disabled' => true,
-                'value'    => $builder->getDbConnection(),
-                'options'  => [
-                    $builder->getDbConnection(),
-                ],
-            ],
+        $connection = [
+            'type'     => 'anomaly.field_type.select',
+            'disabled' => true,
+            'value'    => $builder->getDbConnection(),
+            'options'  => [$builder->getDbConnection()],
         ];
 
-        if ($builder->getForm()->getMode() == 'edit')
+        if ($builder->getForm()->getMode() !== 'edit')
         {
-            $builder->setFields(array_merge($fields, [
-                'path'  => [
-                    'disabled' => true,
+            return $builder->setFields([
+                'title'         => 'anomaly.field_type.text',
+                'addon'         => [
+                    'type'   => 'anomaly.field_type.select',
+                    'config' => [
+                        'mode'          => 'search',
+                        'default_value' => 'anomaly.module.pages',
+                        'options'       => function (AddonCollection $addons)
+                        {
+                            return $addons->installed()->mapWithKeys(
+                                function ($addon)
+                                {
+                                    return [
+                                        $addon->getNamespace() => $addon->getName(),
+                                    ];
+                                }
+                            )->toArray();
+                        },
+                    ],
                 ],
-                'addon' => array_merge(
-                    array_get($fields, 'addon'),
-                    array_merge(
-                        array_get($fields, 'addon.config'),
-                        [
-                            'disabled' => true,
-                            'mode'     => 'dropdown',
-                            'value'    => $builder->getFormEntry()->getAddon(),
-                        ]
-                    )
-                ),
-            ]));
-
-            return;
+                'db_connection' => $connection,
+            ]);
         }
 
-        $builder->setFields($fields);
+        $builder->setFields([
+            'title',
+            'path'          => [
+                'disabled' => true,
+            ],
+            'addon'         => [
+                'type'     => 'anomaly.field_type.select',
+                'disabled' => true,
+                'config'   => [
+                    'mode'  => 'dropdown',
+                    'value' => $builder->getFormEntry()->getAddon(),
+                ],
+            ],
+            'db_connection' => $connection,
+        ]);
     }
 }

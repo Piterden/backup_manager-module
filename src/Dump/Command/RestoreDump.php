@@ -48,36 +48,41 @@ class RestoreDump
      */
     public function handle(Filesystem $files, MessageBag $messages)
     {
-        if ($files->exists($this->path))
+        if (!$files->exists($this->path))
         {
-            if ($dumpData = json_decode($files->get($this->path), true))
-            {
-                $appReference = $this->app->getReference();
-
-                foreach ($dumpData as $tableName => $tableRows)
-                {
-                    $tableName = str_replace($appReference.'_', '', $tableName);
-
-                    DB::table($tableName)->truncate();
-
-                    foreach ($tableRows as $rowData)
-                    {
-                        DB::table($tableName)->insert($rowData);
-                    }
-                }
-
-                return redirect()->back()->withInput()->withErrors(
-                    $messages->success(count($dumpData).' tables successfully restored')
-                );
-            }
-
-            return redirect()->back()->withInput()->withErrors(
-                $messages->error('JSON syntax error!')
-            );
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('Dump file not found!'));
         }
 
-        return redirect()->back()->withInput()->withErrors(
-            $messages->error('Dump file not found!')
-        );
+        if (!$dumpData = json_decode($files->get($this->path), true))
+        {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('JSON syntax error!'));
+        }
+
+        $appReference = $this->app->getReference();
+
+        foreach ($dumpData as $tableName => $tableRows)
+        {
+            $tableName = str_replace($appReference . '_', '', $tableName);
+
+            DB::table($tableName)->truncate();
+
+            foreach ($tableRows as $rowData)
+            {
+                DB::table($tableName)->insert($rowData);
+            }
+        }
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->withErrors($messages->success(
+                count($dumpData) . ' tables successfully restored'
+            ));
     }
 }

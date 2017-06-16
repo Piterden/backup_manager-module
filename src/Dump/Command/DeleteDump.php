@@ -38,22 +38,25 @@ class DeleteDump
      */
     public function handle(Filesystem $files, MessageBag $messages)
     {
-        if ($files->exists($this->path))
+        if (!$files->exists($this->path))
         {
-            if ($files->delete([$this->path]))
-            {
-                return redirect()->back()->withInput()->withErrors(
-                    $messages->success('Dump deleted successfully.')
-                );
-            }
-
-            return redirect()->back()->withInput()->withErrors(
-                $messages->error('Can\'t remove dump!')
-            );
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('Dump file not found!'));
         }
 
-        return redirect()->back()->withInput()->withErrors(
-            $messages->error('Dump file not found!')
-        );
+        if (!$files->delete([$this->path]))
+        {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($messages->error('Can\'t remove dump!'));
+        }
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->withErrors($messages->success('Dump deleted successfully.'));
     }
 }

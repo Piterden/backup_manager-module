@@ -16,7 +16,29 @@ interface DumpRepositoryInterface extends EntryRepositoryInterface
     /**
      * Sync DB with real FS files
      *
-     * @param array $files The files
+     * @param  array            $files The files
+     * @return DumpCollection
      */
     public function sync(array $files);
+
+    /**
+     * Creates entries.
+     *
+     * @param array $entries The entries
+     */
+    function createEntries(array $entries);
+
+    /**
+     * Delete entries.
+     *
+     * @param array $entries The entries
+     */
+    function deleteEntries(array $entries);
+
+    /**
+     * Gets the database entries.
+     *
+     * @return DumpCollection The database entries.
+     */
+    function getDbEntries();
 }

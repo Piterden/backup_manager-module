@@ -26,7 +26,7 @@ class DumpFormBuilder extends FormBuilder
      */
     public function getDbConnection()
     {
-        return $this->db_connection;
+        return $this->db_connection ?: $this->getModel()->getDbConnection();
     }
 
     /**

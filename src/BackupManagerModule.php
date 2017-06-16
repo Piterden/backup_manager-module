@@ -27,11 +27,12 @@ class BackupManagerModule extends Module
     protected $sections = [
         'dumps' => [
             'buttons' => [
-                'new_dump' => [
-                    'class'       => 'btn-warning',
+                'new_dump',
+                'change' => [
+                    'text'        => 'defr.module.backup_manager::button.change',
+                    'href'        => 'admin/backup_manager/choose',
                     'data-toggle' => 'modal',
                     'data-target' => '#modal',
-                    'href'        => 'admin/backup_manager/choose',
                 ],
             ],
         ],

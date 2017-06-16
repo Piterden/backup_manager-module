@@ -22,7 +22,7 @@ class DumpTableBuilder extends TableBuilder
      */
     protected $columns = [
         'title'              => [
-            'wrapper' => '<h3>{value}</h3>',
+            'wrapper' => '<h5>{value}</h5>',
         ],
         'path'               => [
             'heading' => 'module::table.filename.name',
@@ -34,7 +34,7 @@ class DumpTableBuilder extends TableBuilder
             'wrapper' => '<strong>{value}</strong>',
         ],
         'entry.size'         => [
-            'wrapper' => '<h5>{value}</h5>',
+            'wrapper' => '<h6>{value}</h6>',
         ],
         'entry.tables_count' => [
             'heading' => 'module::table.count.name',

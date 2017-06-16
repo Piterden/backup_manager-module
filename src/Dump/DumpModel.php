@@ -132,7 +132,7 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
      */
     public function getDbConnection()
     {
-        return $this->db_connection;
+        return $this->db_connection ?: $this->getDefaultDbConnection();
     }
 
     /**
@@ -146,5 +146,15 @@ class DumpModel extends BackupManagerDumpsEntryModel implements DumpInterface
         $this->db_connection = $db_connection;
 
         return $this;
+    }
+
+    /**
+     * Gets the default database connection.
+     *
+     * @return string The default database connection.
+     */
+    public function getDefaultDbConnection()
+    {
+        return env('DB_CONNECTION', $config->get('database.default'));
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'new_dump'       => 'Create a dump',
+    'new'    => 'Create a dump',
+    'change' => 'Change DB',
 ];

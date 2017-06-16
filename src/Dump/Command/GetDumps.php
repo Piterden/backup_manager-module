@@ -7,9 +7,9 @@ use Illuminate\Filesystem\Filesystem;
 /**
  * Class for get dumps from the filesystem
  *
- * @package defr.module.backup_manager
+ * @package    defr.module.backup_manager
  *
- * @author Denis Efremov <efremov.a.denis@gmail.com>
+ * @author     Denis Efremov <efremov.a.denis@gmail.com>
  */
 class GetDumps
 {
@@ -33,12 +33,11 @@ class GetDumps
             $settings->value('defr.module.backup_manager::dump_path', 'dumps')
         ));
 
-        $list    = $files->glob($path.'/*sql.json');
+        $list    = $files->glob($path . '/*sql.json');
         $entries = [];
 
         foreach ($list as $path)
         {
-            /* @var DumpInterface $entry */
             $entry = [
                 'path'    => $path,
                 'content' => json_decode($files->get($path), true),

@@ -4,6 +4,13 @@ use Defr\BackupManagerModule\Dump\Command\GetDumps;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
+/**
+ * Artisan list dupms command class
+ *
+ * @package    defr.module.backup_manager
+ *
+ * @author     Denis Efremov <efremov.a.denis@gmail.com>
+ */
 class ListCommand extends Command
 {
     use DispatchesJobs;
