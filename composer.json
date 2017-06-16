@@ -2,19 +2,12 @@
     "name": "defr/backup_manager-module",
     "description": "Backup Manager for Streams Platform",
     "type": "streams-addon",
-    "keywords": [
-        "pyrocms",
-        "streams",
-        "backup",
-        "dump",
-        "laravel-cms"
-    ],
+    "keywords": ["pyrocms", "streams-platform", "backup-manager", "dump",
+        "laravel", "addon", "artisan", "restore", "database" ],
     "authors": [
         {
             "name": "Denis Efremov",
             "email": "efremov.a.denis@gmail.com",
-            "homepage": "http://pyrocms.com/",
-            "role": "developer"
         }
     ],
     "support": {
