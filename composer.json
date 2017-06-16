@@ -13,6 +13,10 @@
     "support": {
         "email": "efremov.a.denis@gmail.com"
     },
+    "require": {
+        "php": ">=5.5.9",
+        "anomaly/streams-platform": "1.2.*"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
