@@ -1,8 +1,6 @@
 # Backup Manager
 ## Streams Platform Addon. `backup_manager-module` for PyroCMS.
 
-   > **Requires `"minimum-stability": "dev"` flag in `composer.json`**
-
 A graphical user interface (GUI), allowing you to backup PyroCMS database by addon.
 
 ### Features
@@ -13,36 +11,24 @@ A graphical user interface (GUI), allowing you to backup PyroCMS database by add
 
 ***
 
-## Download
-Clone repository into `addons/{app_reference}/defr/backup_manager-module` folder, or add this module to your PyroCMS project manually uploading files.
+## Installation
 
-### Alternative way
-Add to `composer.json`:
-```js
-    "require": {
-    
-        // ...,
-        
-        "defr/backup_manager-module": "dev-master"
-    },
-    
-    "repositories": [
-        
-        // ...,
-        
-        {
-            "url": "https://github.com/Piterden/backup_manager-module",
-            "type": "git"
-        }
-    ],
+### Step 1
+
+Run
+```bash
+$ composer require defr/backup_manager-module
 ```
 
-Run `composer update` command. It installs module to the `core` folder!
+Either, add to `require` section of `composer.json`:
+```json
+    "defr/backup_manager-module": "~1.0.0",
+```
+Run `composer update` command, which will install module to the `core` folder!
 
-***
+### Step 2
 
-## Installation
-After placing files in correct place, you will need to install migrations using the PyroCMS Control Panel or simply run one of following commands:
+Then you would need to install module to PyroCMS
 ```bash
 $ php artisan module:install backup_manager
 ```
@@ -50,16 +36,12 @@ or
 ```bash
 $ php artisan addon:install defr.module.backup_manager
 ```
-A new menu item will appear in your admin navigation.
-
-***
 
 ## Usage
 
 ### Create a backup from Conrol Panel
 * Click the menu item "Backup Manager".
 * Then click the button "Create a dump".
-  - Select DB connection in modal.
   - Enter the name of the backup you are to create.
   - Select addon to backup.
 * Press save and you are done.
@@ -91,7 +73,7 @@ $ php artisan db:dump
 ```bash
 $ php artisan dump:list
 ```
- 
+
  - Usage:
     dump:list
 
