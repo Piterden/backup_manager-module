@@ -3,11 +3,11 @@
     "description": "Backup Manager for Streams Platform",
     "type": "streams-addon",
     "keywords": ["pyrocms", "streams-platform", "backup-manager", "dump",
-        "laravel", "addon", "artisan", "restore", "database" ],
+        "laravel", "addon", "artisan", "restore", "database"],
     "authors": [
         {
             "name": "Denis Efremov",
-            "email": "efremov.a.denis@gmail.com",
+            "email": "efremov.a.denis@gmail.com"
         }
     ],
     "support": {
