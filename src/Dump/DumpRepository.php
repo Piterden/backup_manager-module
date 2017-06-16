@@ -67,7 +67,7 @@ class DumpRepository extends EntryRepository implements DumpRepositoryInterface
      *
      * @param array $entries The entries
      */
-    protected function createEntries(array $entries)
+    public function createEntries(array $entries)
     {
         foreach ($entries as $path => $file)
         {
@@ -86,7 +86,7 @@ class DumpRepository extends EntryRepository implements DumpRepositoryInterface
      *
      * @param array $entries The entries
      */
-    protected function deleteEntries(array $entries)
+    public function deleteEntries(array $entries)
     {
         foreach ($entries as $path => $model)
         {
@@ -105,7 +105,7 @@ class DumpRepository extends EntryRepository implements DumpRepositoryInterface
      *
      * @return DumpCollection The database entries.
      */
-    protected function getDbEntries()
+    public function getDbEntries()
     {
         return $this->model->get()->mapWithKeys(
             /* @var DumpInterface $entry */

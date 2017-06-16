@@ -26,19 +26,19 @@ interface DumpRepositoryInterface extends EntryRepositoryInterface
      *
      * @param array $entries The entries
      */
-    function createEntries(array $entries);
+    public function createEntries(array $entries);
 
     /**
      * Delete entries.
      *
      * @param array $entries The entries
      */
-    function deleteEntries(array $entries);
+    public function deleteEntries(array $entries);
 
     /**
      * Gets the database entries.
      *
      * @return DumpCollection The database entries.
      */
-    function getDbEntries();
+    public function getDbEntries();
 }
